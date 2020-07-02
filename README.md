@@ -2,14 +2,14 @@
 
 # Fast API
 
-## FastAPI is a modern, fast (high-performance), web framework for building APIs with Python 3.6+ based on standard Python type hints
+### FastAPI is a modern, fast (high-performance), web framework for building APIs with Python 3.6+ based on standard Python type hints
 
-## Here one can able to learn how to implement a Fast Api to check  your ML Model with User Interface
+### Here one can able to learn how to implement a Fast Api to check  your ML Model with User Interface
 [Fast API](https://fastapi.tiangolo.com/)
 
 # Docker 
 
-## Docker is a tool which helps to create, deploy, and run applications by using containers. Docker provides developers and operators with a friendly interface to build, ship, and run containers on any environment. To install docker follow the link https://www.docker.com/get-started
+### Docker is a tool which helps to create, deploy, and run applications by using containers. Docker provides developers and operators with a friendly interface to build, ship, and run containers on any environment. To install docker follow the link https://www.docker.com/get-started
 
 [Docker](https://www.docker.com/)
 
