@@ -2,19 +2,49 @@ import uvicorn
 import pandas as pd
 import pickle
 from fastapi import FastAPI, File, UploadFile
-
-app = FastAPI()
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel,Field
 
 liner_model = 'models/linear-house-price.pkl'
-with open(liner_model, 'rb') as file:
-    pickled_linear_model = pickle.load(file)
+with open(liner_model, 'rb') as f:
+    pickled_linear_model = pickle.load(f)
 
+# Initialize the Fast API APP
+app = FastAPI(
+    title="House Price Prediction",
+    description="A Sample demo application to predict the house price",
+    version="0.1"
+)
 
-@app.post("/single_predict/{crim,zn,indus,chas,nox,rm,age,dis,rad,tax,ptratio,black,lstat}")
-def predict(crim: float, zn: int, indus: float, chas: int, nox: float, rm: float, age: float, dis: float, rad: int,
-            tax: int, ptratio: float, black: float, lstat: float):
+# Enabling CORS to allow all IP to hit while developing and integrating
+origins = ["*"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+class jsonRequest(BaseModel):
+    crim    : float = Field(...)
+    zn      : int   = Field(...)
+    indus   : float = Field(...)
+    chas    : int   = Field(...)
+    nox     : int   = Field(...)
+    rm      : float = Field(...)
+    age     : float = Field(...)
+    dis     : float = Field(...)
+    rad     : int   = Field(...)
+    tax     : int   = Field(...)
+    ptratio : float = Field(...)
+    blask   : float = Field(...)
+    lstat   : float = Field(...)
+
+@app.post("/single_predict")
+def predict(item:jsonRequest):
     labels = [crim, zn, indus, chas, nox, rm, age, dis, rad, tax, ptratio, black, lstat]
-    features = [[crim, zn, indus, chas, nox, rm, age, dis, rad, tax, ptratio, black, lstat]]
+    features = [[item.crim, item.zn, item.indus, item.chas, item.nox, item.rm, item.age,item.dis, item.rad, item.tax, item.ptratio, item.black, item.lstat]]
     to_predict = pd.DataFrame(features, columns=labels)
     prediction = pickled_linear_model.predict(to_predict)
     return {"predicted value:": int(prediction)}
@@ -29,4 +59,4 @@ async def predict_file(file: UploadFile = File(...)):
 
 
 if __name__ == '__main__':
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run("app:app", host="0.0.0.0", port=8000,reload=True)
