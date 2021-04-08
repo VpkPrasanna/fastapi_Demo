@@ -1,0 +1,9 @@
+version: "3"
+services: 
+    houseprice:
+        build: .
+        expose:
+            - "8000"
+        ports:
+            - "8000":8000
+        command: gunicorn app:app --bind 0.0.0.0:8000 --timeout 1200 -w 1 -k uvicorn.workers.UvicornWorker
